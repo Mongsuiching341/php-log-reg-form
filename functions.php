@@ -12,7 +12,7 @@ class UserRegister
     public $errorMessage = null;
     public $successMsg = null;
     public $passErrorMsg = null;
-    const PATH =  "C:\\Users\\HP\\Documents\\login-reg-project\\users.json";
+    // const PATH = getcwd() . "users.json";
     // public $data = [];
 
     public function __construct($fname, $lname, $email, $password, $confirmPassword)
@@ -26,15 +26,17 @@ class UserRegister
 
     public static function allUser()
     {
+        $path =  getcwd() . "\\users.json";
 
-        $users =  json_decode(file_get_contents(self::PATH), true);
+        $users =  json_decode(file_get_contents($path), true);
 
         return $users;
     }
 
     public function addUser()
     {
-        $users =  json_decode(file_get_contents(self::PATH), true);
+        $path =  getcwd() . "\\users.json";
+        $users =  json_decode(file_get_contents($path), true);
 
         $data = ['fname' => $this->fname, 'lname' => $this->lname, 'email' => $this->email, 'password' => password_hash($this->password, PASSWORD_BCRYPT)];
 
@@ -53,7 +55,7 @@ class UserRegister
         $users_data = json_encode($users);
 
         if ($this->password == $this->confirmPassword) {
-            file_put_contents(self::PATH, $users_data);
+            file_put_contents($path, $users_data);
             return  $this->successMsg = 'User created successfully';
         } else {
             return $this->passErrorMsg = 'Password didn\'t match';
@@ -69,7 +71,7 @@ class LoginUser
     public $password;
     public $logedIn = false;
     public $userData  = [];
-    const PATH =  "C:\\Users\\HP\\Documents\\login-reg-project\\users.json";
+
 
     public function __construct($email, $password)
     {
@@ -79,7 +81,9 @@ class LoginUser
 
     public function checkUser()
     {
-        $users = json_decode(file_get_contents(self::PATH), true)['users'];
+        $path =  getcwd() . "\\users.json";
+
+        $users = json_decode(file_get_contents($path), true)['users'];
 
         foreach ($users as $user) {
 
